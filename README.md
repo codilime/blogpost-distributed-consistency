@@ -55,26 +55,6 @@ curl -X POST -H "Content-Type: application/json" \
 ### Listing materials
 ```sh
 curl -s http://${FACTORY_IP_ADDRESS}:8000/materials/ | jq
-[
-  {
-    "name": "Oxygen",
-    "slug": "oxygen",
-    "quantity_unit": "mole",
-    "id": "699139c4-eb11-4815-9021-2c8f66b38d5f"
-  },
-  {
-    "name": "Hydrogen",
-    "slug": "hydrogen",
-    "quantity_unit": "mole",
-    "id": "c18605cd-3e1e-4898-8192-1da5662bc30a"
-  },
-  {
-    "name": "Sulphur",
-    "slug": "sulphur",
-    "quantity_unit": "mole",
-    "id": "f49a9fff-8345-41cb-934f-f75adc3161b5"
-  }
-]
 ```
 
 ### Updating a material
@@ -87,16 +67,6 @@ curl -X PATCH -H "Content-Type: application/json" \
 ### Fetching information about a single material
 ```sh
 curl -s http://${FACTORY_IP_ADDRESS}:8000/materials/sulphur | jq
-{
-  "name": "Sulphur",
-  "slug": "sulphur",
-  "quantity_unit": "µg",
-  "id": "f49a9fff-8345-41cb-934f-f75adc3161b5",
-  "created_at": "2025-06-17T07:25:13",
-  "boms": [],
-  "stock": [],
-  "products": []
-}
 ```
 
 ### Removing a material
@@ -116,16 +86,6 @@ information about a single warehouse would be
 
 ```sh
 curl -s http://${FACTORY_IP_ADDRESS}:8000/warehouses/chemicals-1 | jq
-{
-  "name": "Chemicals-1",
-  "slug": "chemicals-1",
-  "location": "Wien",
-  "capacity": 1000000,
-  "max_capacity": 1000000,
-  "id": "ad02b895-ea98-4bd5-a889-7869f3e521fb",
-  "created_at": "2025-06-17T07:28:47",
-  "stock": []
-}
 ```
 
 ### Delivery process
@@ -143,58 +103,10 @@ testing a delivery something will change, e.g.
 
 ```sh
 curl -s http://${FACTORY_IP_ADDRESS}:8000/warehouses/chemicals-1 | jq
-{
-  "name": "Chemicals-1",
-  "slug": "chemicals-1",
-  "location": "Wien",
-  "capacity": 999970,
-  "max_capacity": 1000000,
-  "id": "ad02b895-ea98-4bd5-a889-7869f3e521fb",
-  "created_at": "2025-06-17T07:28:47",
-  "stock": [
-    {
-      "id": "d9b1f90d-8559-46e5-b6c3-546d16666aa0",
-      "quantity": 10,
-      "material_name": "Oxygen",
-      "material_slug": "oxygen"
-    },
-    {
-      "id": "31ed7603-43f2-41a9-a817-10ce54fbdf29",
-      "quantity": 20,
-      "material_name": "Hydrogen",
-      "material_slug": "hydrogen"
-    }
-  ]
-}
 ```
 
 ```sh
 curl -s http://${FACTORY_IP_ADDRESS}:8000/materials/oxygen | jq
-{
-  "name": "Oxygen",
-  "slug": "oxygen",
-  "quantity_unit": "mole",
-  "id": "699139c4-eb11-4815-9021-2c8f66b38d5f",
-  "created_at": "2025-06-17T07:24:50",
-  "boms": [],
-  "stock": [
-    {
-      "id": "d9b1f90d-8559-46e5-b6c3-546d16666aa0",
-      "warehouse_id": "ad02b895-ea98-4bd5-a889-7869f3e521fb",
-      "quantity": 10,
-      "warehouse_name": "Chemicals-1",
-      "warehouse_slug": "chemicals-1"
-    },
-    {
-      "id": "ca6bd72a-48ec-4a29-a3d9-545d09f8b7e9",
-      "warehouse_id": "daae3903-dd42-473b-a160-0a838ccf65f0",
-      "quantity": 10000,
-      "warehouse_name": "Chemicals-2",
-      "warehouse_slug": "chemicals-2"
-    }
-  ],
-  "products": []
-}
 ```
 
 ### Further testing
