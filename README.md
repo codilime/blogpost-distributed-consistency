@@ -16,7 +16,7 @@ docker build -t factory:local .
 Once you have an image built, run it like
 
 ```sh
-docker run --rm --name factory --network=host -p 8000:8000 factory:local
+docker run --rm --name factory --network=host factory:local
 ```
 
 This snippet is intended just for testing the app, it is usually not a good
