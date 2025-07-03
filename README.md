@@ -16,7 +16,7 @@ docker build -t factory:local .
 Once you have an image built, run it like
 
 ```sh
-docker run --rm --name factory --network=host -p 8000:8000 factory:local
+docker run --rm --name factory -p 8000:8000 factory:local
 ```
 
 This snippet is intended just for testing the app, it is usually not a good
@@ -24,26 +24,33 @@ idea to run any containers like that in production.
 
 ## Testing it
 
+By default Docker container would probably start in `bridge` network mode (that
+depends on your configuration), to find its IP address please run something like
+
+```sh
+docker inspect factory | grep IPAddress
+```
+
 In another terminal window simple `curl` can be used to test the application, e.g.
 
 ### Creating new materials (oxygen, hydrogen and sulphur)
 ```sh
 curl -X POST -H "Content-Type: application/json" \
   -d '{"name": "Oxygen", "quantity_unit": "mole"}' \
-  http://localhost:8000/materials/
+  http://172.20.0.2:8000/materials/
 
 curl -X POST -H "Content-Type: application/json" \
   -d '{"name": "Hydrogen", "quantity_unit": "mole"}' \
-  http://localhost:8000/materials/
+  http://172.20.0.2:8000/materials/
 
 curl -X POST -H "Content-Type: application/json" \
   -d '{"name": "Sulphur", "quantity_unit": "mole"}' \
-  http://localhost:8000/materials/
+  http://172.20.0.2:8000/materials/
 ```
 
 ### Listing materials
 ```sh
-curl -s http://localhost:8000/materials/ | jq
+curl -s http://172.20.0.2:8000/materials/ | jq
 [
   {
     "name": "Oxygen",
@@ -70,12 +77,12 @@ curl -s http://localhost:8000/materials/ | jq
 ```sh
 curl -X PATCH -H "Content-Type: application/json" \
   -d '{"quantity_unit": "µg"}' \
-  http://localhost:8000/materials/sulphur
+  http://172.20.0.2:8000/materials/sulphur
 ```
 
 ### Fetching information about a single material
 ```sh
-curl -s http://localhost:8000/materials/sulphur | jq
+curl -s http://172.20.0.2:8000/materials/sulphur | jq
 {
   "name": "Sulphur",
   "slug": "sulphur",
@@ -90,21 +97,21 @@ curl -s http://localhost:8000/materials/sulphur | jq
 
 ### Removing a material
 ```sh
-curl -X DELETE http://localhost:8000/materials/sulphur
+curl -X DELETE http://172.20.0.2:8000/materials/sulphur
 ```
 
 ### Creating a warehouse
 ```sh
 curl -X POST -H "Content-Type: application/json" \
   -d '{"name": "Chemicals-1", "location": "Wien", "max_capacity": 1000000}' \
-  http://localhost:8000/warehouses/
+  http://172.20.0.2:8000/warehouses/
 ```
 
 other operations look just like operations on materials, e.g. fetching
 information about a single warehouse would be
 
 ```sh
-curl -s http://localhost:8000/warehouses/chemicals-1 | jq
+curl -s http://172.20.0.2:8000/warehouses/chemicals-1 | jq
 {
   "name": "Chemicals-1",
   "slug": "chemicals-1",
@@ -124,14 +131,14 @@ curl -X POST -H "Content-Type: application/json" \
     "positions": [{"material_id": "699139c4-eb11-4815-9021-2c8f66b38d5f", 
     "quantity": 10}, {"material_id": "c18605cd-3e1e-4898-8192-1da5662bc30a", \
     "quantity": 20}]}' \
-  http://localhost:8000/delivery/
+  http://172.20.0.2:8000/delivery/
 ```
 
 Delivered materials stored in a warehouse will diminish its capacity, so after
 testing a delivery something will change, e.g.
 
 ```sh
-curl -s http://localhost:8000/warehouses/chemicals-1 | jq
+curl -s http://172.20.0.2:8000/warehouses/chemicals-1 | jq
 {
   "name": "Chemicals-1",
   "slug": "chemicals-1",
@@ -158,7 +165,7 @@ curl -s http://localhost:8000/warehouses/chemicals-1 | jq
 ```
 
 ```sh
-curl -s http://localhost:8000/materials/oxygen | jq
+curl -s http://172.20.0.2:8000/materials/oxygen | jq
 {
   "name": "Oxygen",
   "slug": "oxygen",
