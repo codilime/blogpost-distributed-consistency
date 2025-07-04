@@ -35,19 +35,27 @@ export FACTORY_IP_ADDRESS=$( docker inspect factory | jq -r '.[].NetworkSettings
 This should give you an important information about the IP of the container. And
 that will be available as the `FACTORY_IP_ADDRESS` environment variable. Now with
 that variable available (so in the same terminal window), you can run some `curl`
-commands to test the application:
+commands to test the application.
+
+Note: If your Docker environment blocks direct access to the containers, you
+could run each `curl` command in a container. The following code snippets would
+still be relavant if you created an alias, e.g.
+
+```sh
+alias curl='docker run --rm curlimages/curl'
+```
 
 ### Creating new materials (oxygen, hydrogen and sulphur)
 ```sh
-curl -X POST -H "Content-Type: application/json" \
+curl -s -X POST -H "Content-Type: application/json" \
   -d '{"name": "Oxygen", "quantity_unit": "mole"}' \
   http://${FACTORY_IP_ADDRESS}:8000/materials/
 
-curl -X POST -H "Content-Type: application/json" \
+curl -s -X POST -H "Content-Type: application/json" \
   -d '{"name": "Hydrogen", "quantity_unit": "mole"}' \
   http://${FACTORY_IP_ADDRESS}:8000/materials/
 
-curl -X POST -H "Content-Type: application/json" \
+curl -s -X POST -H "Content-Type: application/json" \
   -d '{"name": "Sulphur", "quantity_unit": "mole"}' \
   http://${FACTORY_IP_ADDRESS}:8000/materials/
 ```
@@ -59,7 +67,7 @@ curl -s http://${FACTORY_IP_ADDRESS}:8000/materials/ | jq
 
 ### Updating a material
 ```sh
-curl -X PATCH -H "Content-Type: application/json" \
+curl -s -X PATCH -H "Content-Type: application/json" \
   -d '{"quantity_unit": "µg"}' \
   http://${FACTORY_IP_ADDRESS}:8000/materials/sulphur
 ```
@@ -71,12 +79,12 @@ curl -s http://${FACTORY_IP_ADDRESS}:8000/materials/sulphur | jq
 
 ### Removing a material
 ```sh
-curl -X DELETE http://${FACTORY_IP_ADDRESS}:8000/materials/sulphur
+curl -s -X DELETE http://${FACTORY_IP_ADDRESS}:8000/materials/sulphur
 ```
 
 ### Creating a warehouse
 ```sh
-curl -X POST -H "Content-Type: application/json" \
+curl -s -X POST -H "Content-Type: application/json" \
   -d '{"name": "Chemicals-1", "location": "Wien", "max_capacity": 1000000}' \
   http://${FACTORY_IP_ADDRESS}:8000/warehouses/
 ```
@@ -90,7 +98,7 @@ curl -s http://${FACTORY_IP_ADDRESS}:8000/warehouses/chemicals-1 | jq
 
 ### Delivery process
 ```sh
-curl -X POST -H "Content-Type: application/json" \
+curl -s -X POST -H "Content-Type: application/json" \
   -d '{"warehouse_id": "ad02b895-ea98-4bd5-a889-7869f3e521fb", \
     "positions": [{"material_id": "699139c4-eb11-4815-9021-2c8f66b38d5f", \
     "quantity": 10}, {"material_id": "c18605cd-3e1e-4898-8192-1da5662bc30a", \
