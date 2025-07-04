@@ -106,6 +106,10 @@ curl -s -X POST -H "Content-Type: application/json" \
   http://${FACTORY_IP_ADDRESS}:8000/delivery/
 ```
 
+Note: The `warehouse_id` and `material_id`s values (UUIDv4) are quoted above
+only by way of example, they are pseudo-random values so will be different
+in each environment.
+
 Delivered materials stored in a warehouse will diminish its capacity, so after
 testing a delivery something will change, e.g.
 
