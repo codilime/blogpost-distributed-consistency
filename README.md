@@ -92,7 +92,7 @@ curl -s http://${FACTORY_IP_ADDRESS}:8000/warehouses/chemicals-1 | jq
 ```sh
 curl -X POST -H "Content-Type: application/json" \
   -d '{"warehouse_id": "ad02b895-ea98-4bd5-a889-7869f3e521fb", \
-    "positions": [{"material_id": "699139c4-eb11-4815-9021-2c8f66b38d5f", 
+    "positions": [{"material_id": "699139c4-eb11-4815-9021-2c8f66b38d5f", \
     "quantity": 10}, {"material_id": "c18605cd-3e1e-4898-8192-1da5662bc30a", \
     "quantity": 20}]}' \
   http://${FACTORY_IP_ADDRESS}:8000/delivery/
