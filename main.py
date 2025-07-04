@@ -51,7 +51,7 @@ def create_application() -> app.FactoryApp:
 
 
 def main() -> None:  # noqa: D103
-    uvicorn.run("main:create_application", host="localhost", port=8000, reload=True)
+    uvicorn.run("main:create_application", host="0.0.0.0", port=8000, reload=True)
 
 
 if __name__ == "__main__":
