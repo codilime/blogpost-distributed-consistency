@@ -99,16 +99,20 @@ curl -s http://${FACTORY_IP_ADDRESS}:8000/warehouses/chemicals-1 | jq
 ### Delivery process
 ```sh
 curl -s -X POST -H "Content-Type: application/json" \
-  -d '{"warehouse_id": "ad02b895-ea98-4bd5-a889-7869f3e521fb", \
-    "positions": [{"material_id": "699139c4-eb11-4815-9021-2c8f66b38d5f", \
-    "quantity": 10}, {"material_id": "c18605cd-3e1e-4898-8192-1da5662bc30a", \
-    "quantity": 20}]}' \
+  -d '{"warehouse_id": "ad02b895-ea98-4bd5-a889-7869f3e521fb", "positions": [{"material_id": "699139c4-eb11-4815-9021-2c8f66b38d5f", "quantity": 10}, {"material_id": "c18605cd-3e1e-4898-8192-1da5662bc30a", "quantity": 20}]}' \
   http://${FACTORY_IP_ADDRESS}:8000/delivery/
 ```
 
 Note: The `warehouse_id` and `material_id`s values (UUIDv4) are quoted above
 only by way of example, they are pseudo-random values so will be different
 in each environment.
+You can use below snippets to retrieve these values:
+
+```sh
+curl -s http://${FACTORY_IP_ADDRESS}:8000/warehouses/chemicals-1 | jq '.id'
+curl -s http://${FACTORY_IP_ADDRESS}:8000/materials/oxygen | jq '.id'
+curl -s http://${FACTORY_IP_ADDRESS}:8000/materials/hydrogen | jq '.id'
+```
 
 Delivered materials stored in a warehouse will diminish its capacity, so after
 testing a delivery something will change, e.g.
@@ -126,3 +130,8 @@ curl -s http://${FACTORY_IP_ADDRESS}:8000/materials/oxygen | jq
 There are other endpoints, not described in this short README file. Feel
 free to investigate them on your own by browsing files in the `routers/`
 directory.
+Or you can also run:
+```sh
+$BROWSER http://${FACTORY_IP_ADDRESS}:8000/docs
+
+```
